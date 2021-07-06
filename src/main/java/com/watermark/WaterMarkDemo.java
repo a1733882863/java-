@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
  *
  *  利用Java代码给图片加水印
  */
-public class WaterMarkUtils {
+public class WaterMarkDemo {
 
     // 水印透明度
     private static float alpha = 0.5f;
@@ -131,7 +131,7 @@ public class WaterMarkUtils {
         String waterMarkContent = "莆田餐巴"; // 水印内容
 //		Color color = Color.GRAY; // 水印图片色彩以及透明度
         Color color = new Color(213, 52, 24);
-        new WaterMarkUtils().addWaterMark(srcImgPath, tarImgPath,
+        new WaterMarkDemo().addWaterMark(srcImgPath, tarImgPath,
                 waterMarkContent, color, font, -40);
     }
 }

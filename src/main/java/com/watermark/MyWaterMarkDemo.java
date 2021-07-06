@@ -1,12 +1,14 @@
 package com.watermark;
 
+import com.watermark.utils.OssFileUtil;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-public class MyWaterMarkUtils {
+public class MyWaterMarkDemo {
 
 
 
@@ -38,7 +40,7 @@ public class MyWaterMarkUtils {
         Integer xDistance = 80;
         Integer yDistance = 80;
         // 水印透明度
-        float alpha = 1f;
+        float alpha = 0.5f;
         //水印坐标
         Integer x = 55;
         Integer y = 300;
@@ -60,16 +62,20 @@ public class MyWaterMarkUtils {
         Image srcImg = ImageIO.read(inputStreamByUrl);
         int srcImgWidth = srcImg.getWidth(null);
         int srcImgHeight = srcImg.getHeight(null);
+
+        xDistance = srcImgWidth >> 3;
         BufferedImage bufImg = new BufferedImage(srcImgWidth, srcImgHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = bufImg.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);// 设置对线段的锯齿状边缘处理
         g.drawImage(srcImg.getScaledInstance(srcImg.getWidth(null), srcImg.getHeight(null), Image.SCALE_SMOOTH), 0, 0, null);
 
         //水印文件
-        InputStream markInputStreamByUrl = OssFileUtil.getInputStreamByUrl("https://rzico.oss-cn-shenzhen.aliyuncs.com/dinnerBar/min/logo.png");
+        InputStream markInputStreamByUrl = OssFileUtil.getInputStreamByUrl("https://ptcb.oss-cn-hangzhou.aliyuncs.com/logo/ptcblogo.png");
         Image markImg = ImageIO.read(markInputStreamByUrl);
-        int logoImgWidthMark = markImg.getWidth(null);
-        int logoImgHeightMark = markImg.getHeight(null);
+        //int logoImgWidthMark = markImg.getWidth(null);
+        //int logoImgHeightMark = markImg.getHeight(null);
+        int logoImgWidthMark = srcImgWidth >> 3;
+        int logoImgHeightMark = logoImgWidthMark >> 2;
 
         //画上水印
         if (null != degree) {
@@ -84,11 +90,11 @@ public class MyWaterMarkUtils {
         int markWidth =0;
         int markHeight = 0;
         if (logoSize < 0 ) {
-            markWidth = logoImgWidthMark >> -logoSize;// logo长度
-            markHeight = logoImgHeightMark >> -logoSize;// logo高度
+            markWidth = logoImgWidthMark / -logoSize;// logo长度
+            markHeight = logoImgHeightMark / -logoSize;// logo高度
         } else{
-            markWidth = logoImgWidthMark << logoSize;// logo长度
-            markHeight = logoImgHeightMark << logoSize;// logo高度
+            markWidth = logoImgWidthMark * logoSize;// logo长度
+            markHeight = logoImgHeightMark * logoSize;// logo高度
         }
 
         //循环添加水印
@@ -105,17 +111,17 @@ public class MyWaterMarkUtils {
         g.dispose();
 
         // 输出图片
-//        FileOutputStream outImgStream = new FileOutputStream(tarImgPath);
-//        String formatName = srcImgPath.substring(srcImgPath.indexOf(".") + 1, srcImgPath.length());
-//        ImageIO.write(bufImg, formatName, outImgStream);
-//        System.out.println("添加水印完成");
-//        outImgStream.flush();
-//        outImgStream.close();
+        FileOutputStream outImgStream = new FileOutputStream(tarImgPath);
+        String formatName = srcImgPath.substring(srcImgPath.indexOf(".") + 1, srcImgPath.length());
+        ImageIO.write(bufImg, formatName, outImgStream);
+        System.out.println("添加水印完成");
+        outImgStream.flush();
+        outImgStream.close();
 
         //上传到Oss
 
 
-        String s = OssFileUtil.uploadAliyun2(null, "testmarkdir/markimg.png", OssFileUtil.getImageStream(bufImg), "utf-8");
-        System.out.println(s);
+//        String s = OssFileUtil.uploadAliyun2(null, "testmarkdir/markimg.png", OssFileUtil.getImageStream(bufImg), "utf-8");
+//        System.out.println(s);
     }
 }

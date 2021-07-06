@@ -8,6 +8,9 @@
     <artifactId>java基础练习</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>springboot-export-datebase</module>
+    </modules>
 
     <dependencies>
         <dependency>

@@ -1,4 +1,4 @@
-package com.watermark;
+package com.xz.utils;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
@@ -72,10 +72,10 @@ public class OssFileUtil {
 
     public static void uploadAliyun(String sysPlugin, String path, InputStream inputStream, String contentType) throws IOException {
 
-        String accessId = "";
-        String accessKey = "";
-        String bucketName = "";
-        String endpoint = "";
+        String accessId = "LTAI4G4BXSto8ZG7NgnRzV9L";
+        String accessKey = "fvv3luaDnJTbVq6BnJoO14eFV1gEn4";
+        String bucketName = "ptcb";
+        String endpoint = "oss-cn-hangzhou.aliyuncs.com";
         try {
             OSSClient ossClient = new OSSClient(endpoint, accessId, accessKey);
             ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -91,10 +91,10 @@ public class OssFileUtil {
 
     public static String uploadAliyun2(String sysPlugin, String path, InputStream inputStream, String contentType) throws IOException {
 
-        String accessId = "";
-        String accessKey = "";
-        String bucketName = "";
-        String endpoint = "";
+        String accessId = "LTAI4G4BXSto8ZG7NgnRzV9L";
+        String accessKey = "fvv3luaDnJTbVq6BnJoO14eFV1gEn4";
+        String bucketName = "ptcb";
+        String endpoint = "oss-cn-hangzhou.aliyuncs.com";
         try {
             //2 创建OssClient对象
             OSS ossClient =new OSSClientBuilder().build(endpoint,accessId,accessKey);

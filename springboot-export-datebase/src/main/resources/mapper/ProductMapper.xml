@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xz.mapper.ProductMapper">
+<resultMap id="ProductMap" type="com.xz.model.Product">
+    <!---->
+    <result column="id" property="id"/>
+    <!--创建日期-->
+    <result column="create_date" property="createDate"/>
+    <!--修改日期-->
+    <result column="modify_date" property="modifyDate"/>
+    <!--成本价-->
+    <result column="cost" property="cost"/>
+    <!--是否删除-->
+    <result column="deleted" property="deleted"/>
+    <!--是否列出-->
+    <result column="is_list" property="isList"/>
+    <!--是否上架-->
+    <result column="is_marketable" property="isMarketable"/>
+    <!--是否上架-->
+    <result column="is_meta_video" property="isMetaVideo"/>
+    <!--市场价-->
+    <result column="market_price" property="marketPrice"/>
+    <!--单位系数-->
+    <result column="unit_rate" property="unitRate"/>
+    <!--名称-->
+    <result column="name" property="name"/>
+    <!--简称-->
+    <result column="short_name" property="shortName"/>
+    <!--销售价-->
+    <result column="price" property="price"/>
+    <!--编号-->
+    <result column="sn" property="sn"/>
+    <!--单位-->
+    <result column="unit" property="unit"/>
+    <!--vip1价-->
+    <result column="vip1price" property="vip1price"/>
+    <!--vip2价-->
+    <result column="vip2price" property="vip2price"/>
+    <!--vip3价-->
+    <result column="vip3price" property="vip3price"/>
+    <!--vip4价-->
+    <result column="vip4price" property="vip4price"/>
+    <!--vip5价-->
+    <result column="vip5price" property="vip5price"/>
+    <!--重量-->
+    <result column="weight" property="weight"/>
+    <result column="point" property="point"/>
+
+    <!--商品-->
+    <result column="goods" property="goodsId"/>
+    <!--分类-->
+    <result column="product_category_id" property="productCategoryId"/>
+    <!---->
+    <result column="orders" property="orders"/>
+    <!--规格1-->
+    <result column="spec1" property="spec1"/>
+    <!--规格2-->
+    <result column="spec2" property="spec2"/>
+    <!--缩略图-->
+    <result column="thumbnail" property="thumbnail"/>
+    <!--已分配库存-->
+    <result column="allocated_stock" property="allocatedStock"/>
+    <!--当前库存-->
+    <result column="stock" property="stock"/>
+    <!--商品类型 {0:实物,1:虚拟}-->
+    <result column="type" property="type"/>
+    <!--配送方式 (0.全国快递,1.到店核销,2.同城配送)-->
+    <result column="shipping_method" property="shippingMethod"/>
+    <!--类型 {0.产品,1:套餐,2:水票,3.称重}-->
+    <result column="sub_type" property="subType"/>
+    <result column="publish_type" property="publishType"/>
+    <!--保期质-->
+    <result column="quality" property="quality"/>
+    <!--分销政策-->
+    <result column="distribution_id" property="distributionId"/>
+    <!--品牌-->
+    <result column="brand_id" property="brandId"/>
+    <!--商品属性-->
+    <result column="meta" property="meta"/>
+    <!--商品详情-->
+    <result column="content" property="content"/>
+    <!--描述说明-->
+    <result column="sub_title" property="subTitle"/>
+    <!--最小起订量-->
+    <result column="min_limit" property="minLimit"/>
+    <!--最小起订量-->
+    <result column="max_limit" property="maxLimit"/>
+    <!--供应商-->
+    <result column="freight_id" property="freightId"/>
+    <!--供应商-->
+    <result column="supplier_id" property="supplierId"/>
+    <!--归属企业-->
+    <result column="enterprise_id" property="enterpriseId"/>
+    <!--创建者-->
+    <result column="create_by" property="createBy"/>
+    <!--更新者-->
+    <result column="modify_by" property="modifyBy"/>
+    <!--单位类型-->
+    <result column="unit_type" property="unitType"/>
+    <!--主商品ID-->
+    <result column="main_product_id" property="mainProductId"/>
+    <!--税率-->
+    <result column="tax" property="tax"/>
+
+<!--    &lt;!&ndash;分类名称 &ndash;&gt;-->
+<!--    <association property="productCategory" column="{parentId=product_category_id}" select="com.rzico.basics.mapper.ProductCategoryMapper.getParent"/>-->
+
+<!--    &lt;!&ndash;所属商户 &ndash;&gt;-->
+<!--    <association property="enterprise" column="{enterpriseId=enterprise_id}" select="com.rzico.basics.mapper.EnterpriseMapper.getEnterpriseById"/>-->
+<!--    &lt;!&ndash;所属商户 &ndash;&gt;-->
+<!--    <association property="supplier" column="{supplierId=supplier_id}" select="com.rzico.basics.mapper.SupplierMapper.getSupplierBySupplierId"/>-->
+
+<!--    <collection property="tags"  column="id" select="com.rzico.basics.mapper.ProductTagMapper.getTagByProduct">-->
+<!--    </collection>-->
+
+</resultMap>
+
+    <!--列信息-->
+    <sql id="column_list">
+        id,create_date,modify_date,cost,unit_rate,publish_type,shipping_method,deleted,is_list,freight_id,is_marketable,is_meta_video,
+        market_price,meta,content,name,short_name,price,sn,unit,vip1price,vip2price,vip3price,vip4price,vip5price,weight,goods,
+        product_category_id,orders,spec1,spec2,thumbnail,allocated_stock,stock,type,sub_type,quality,distribution_id,brand_id,sub_title,
+        min_limit,max_limit,supplier_id,enterprise_id,create_by,modify_by,unit_type,main_product_id,point,tax
+    </sql>
+    <!--动态条件-->
+    <sql id="where_filters">
+        <where>
+            <if test="id !=null and id !=''">
+                AND id=#{id}
+            </if>
+            <if test="createDate !=null and createDate !=''">
+                AND create_date=#{createDate}
+            </if>
+            <if test="modifyDate !=null and modifyDate !=''">
+                AND modify_date=#{modifyDate}
+            </if>
+            <if test="startDate !=null and startDate !=''">
+                AND modify_date > #{startDate}
+            </if>
+            <if test="endDate !=null and endDate !=''">
+                AND modify_date &lt; #{endDate}
+            </if>
+            <if test="cost !=null">
+                AND cost=#{cost}
+            </if>
+            <if test="deleted !=null">
+                AND deleted=#{deleted}
+            </if>
+            <if test="isList !=null">
+                AND is_list=#{isList}
+            </if>
+            <if test="isMarketable !=null">
+                AND is_marketable=#{isMarketable}
+            </if>
+            <if test="isMetaVideo !=null">
+                AND is_meta_video=#{isMetaVideo}
+            </if>
+            <if test="marketPrice !=null">
+                AND market_price=#{marketPrice}
+            </if>
+            <if test="name !=null and name !=''">
+                AND (name like concat('%',#{name},'%') or short_name like concat('%',#{name},'%'))
+            </if>
+            <if test="keyword !=null and keyword !=''">
+                AND (sn like CONCAT('%', #{keyword,jdbcType=VARCHAR},'%') or name like CONCAT('%', #{keyword,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="price !=null">
+                AND price=#{price}
+            </if>
+            <if test="sn !=null and sn !=''">
+                AND sn like concat('%',#{sn},'%')
+            </if>
+            <if test="unit !=null and unit !=''">
+                AND unit=#{unit}
+            </if>
+            <if test="vip1price !=null">
+                AND vip1price=#{vip1price}
+            </if>
+            <if test="vip2price !=null">
+                AND vip2price=#{vip2price}
+            </if>
+            <if test="vip3price !=null">
+                AND vip3price=#{vip3price}
+            </if>
+            <if test="vip4price !=null">
+                AND vip4price=#{vip4price}
+            </if>
+            <if test="vip5price !=null">
+                AND vip5price=#{vip5price}
+            </if>
+            <if test="weight !=null">
+                AND weight=#{weight}
+            </if>
+            <if test="goodsId !=null">
+                AND goods=#{goodsId}
+            </if>
+            <if test="productCategoryId !=null and productCategoryId==0">
+                AND product_category_id is null
+            </if>
+            <if test="treePath !=null and treePath !=''">
+                AND product_category_id in (select id from wx_product_category where tree_path like CONCAT('%,', #{treePath,jdbcType=VARCHAR},',%'))
+            </if>
+            <if test="orders !=null and orders !=''">
+                AND orders=#{orders}
+            </if>
+            <if test="spec1 !=null and spec1 !=''">
+                AND spec1=#{spec1}
+            </if>
+            <if test="spec2 !=null and spec2 !=''">
+                AND spec2=#{spec2}
+            </if>
+            <if test="thumbnail !=null and thumbnail !=''">
+                AND thumbnail=#{thumbnail}
+            </if>
+            <if test="allocatedStock !=null">
+                AND allocated_stock=#{allocatedStock}
+            </if>
+            <if test="stock !=null">
+                AND stock=#{stock}
+            </if>
+            <if test="type !=null">
+                AND type=#{type}
+            </if>
+            <if test="subType !=null">
+                AND sub_type=#{subType}
+            </if>
+            <if test="publishType !=null">
+                AND publish_type=#{publishType}
+            </if>
+            <if test="quality !=null">
+                AND quality=#{quality}
+            </if>
+            <if test="distributionId !=null and distributionId !=''">
+                AND distribution=#{distributionId}
+            </if>
+            <if test="brandId !=null">
+                AND brand_id=#{brandId}
+            </if>
+            <if test="freightId !=null">
+                AND freight_id=#{freightId}
+            </if>
+            <if test="subTitle !=null and subTitle !=''">
+                AND sub_title=#{subTitle}
+            </if>
+            <if test="minLimit !=null and minLimit !=''">
+                AND min_limit=#{minLimit}
+            </if>
+            <if test="supplierId !=null and supplierId !=''">
+                AND supplier_id=#{supplierId}
+            </if>
+            <if test="enterpriseId !=null and enterpriseId !=''">
+                AND enterprise_id=#{enterpriseId}
+            </if>
+            <if test="createBy !=null and createBy !=''">
+                AND create_by=#{createBy}
+            </if>
+            <if test="modifyBy !=null and modifyBy !=''">
+                AND modify_by=#{modifyBy}
+            </if>
+            <if test="unitType !=null">
+                AND unit_type=#{unitType}
+            </if>
+            <if test="mainProductId !=null">
+                AND main_product_id=#{mainProductId}
+            </if>
+            <if test="tax !=null">
+                AND tax=#{tax}
+            </if>
+            <if test="tagIds !=null">
+                AND id in (select products from wx_product_tag where tags in
+                <foreach collection="tagIds" open="(" separator="," close=")" item="tagId">
+                    #{tagId}
+                </foreach>
+                )
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectList" parameterType="map" resultMap="ProductMap">
+        select
+        <include refid="column_list"/>
+        from wx_product
+        <include refid="where_filters"/>
+        <if test="sortField != null and sortField == 'product_category_id'" >
+            ORDER BY product_category_id,orders desc,id desc
+        </if>
+        <if test="sortField != null and sortField != 'product_category_id'" >
+            ORDER BY ${sortField}
+            <if test="sortType != null and sortType != ''">
+                ${sortType}
+            </if>
+            ,orders desc,id desc
+        </if>
+        <if test="sortField == null">
+            ORDER BY orders desc,id desc
+        </if>
+    </select>
+
+    <select id="selectRowCount" parameterType="map" resultType="java.lang.Integer">
+        select
+        count(*)
+        from wx_product
+        <include refid="where_filters"/>
+    </select>
+
+    <resultMap id="ProductVoMap" type="com.xz.model.ProductVo">
+        <!---->
+        <result column="id" property="id"/>
+        <!--市场价-->
+        <result column="market_price" property="marketPrice"/>
+        <result column="is_marketable" property="isMarketable"/>
+        <!--名称-->
+        <result column="name" property="name"/>
+        <result column="mch_name" property="mchName"/>
+        <result column="mch_logo" property="mchLogo"/>
+        <!--销售价-->
+        <result column="price" property="price"/>
+        <!--vip1价-->
+        <result column="vip1price" property="vip1price"/>
+        <!--vip2价-->
+        <result column="vip2price" property="vip2price"/>
+        <!--vip3价-->
+        <result column="vip3price" property="vip3price"/>
+        <!--vip4价-->
+        <result column="vip4price" property="vip4price"/>
+        <!--vip5价-->
+        <result column="vip5price" property="vip5price"/>
+        <!--商品-->
+        <result column="goods" property="goodsId"/>
+        <!--总销量-->
+        <result column="total_sale" property="totalSale"/>
+        <!--好评数-->
+        <result column="review" property="review"/>
+        <result column="sub_type" property="subType"/>
+        <result column="point" property="point"/>
+
+        <!--分类路径-->
+        <result column="tree_path" property="treePath"/>
+
+        <!--分类-->
+        <result column="product_category_id" property="productCategoryId"/>
+        <!--分类-->
+        <result column="product_category_name" property="productCategoryName"/>
+        <!--品牌-->
+        <result column="brand_id" property="brandId"/>
+        <result column="freight_id" property="freightId"/>
+
+        <!--规格1-->
+        <result column="spec1" property="spec1"/>
+        <!--规格2-->
+        <result column="spec2" property="spec2"/>
+        <!--缩略图-->
+        <result column="thumbnail" property="thumbnail"/>
+        <!--可用库存-->
+        <result column="stock" property="stock"/>
+        <!--品牌-->
+        <result column="brand_name" property="brandName"/>
+        <!--描述说明-->
+        <result column="sub_title" property="subTitle"/>
+        <!--最小起订量-->
+        <result column="min_limit" property="minLimit"/>
+        <!--最小起订量-->
+        <result column="max_limit" property="maxLimit"/>
+
+<!--        <collection property="promotions"  column="{goodsId=goods,enterpriseId=enterprise_id}" select="com.rzico.basics.mapper.ProductMapper.getPromotionVo">-->
+<!--        </collection>-->
+
+<!--        <collection property="coupons"  column="{goodsId=goods,brandId=brand_id,productCategoryId=product_category_id,enterpriseId=enterprise_id}" select="com.rzico.basics.mapper.ProductMapper.getCouponVo">-->
+<!--        </collection>-->
+
+    </resultMap>
+
+    <!--动态条件-->
+    <sql id="where_vo_filters">
+        <where>
+            <if test="id !=null and id !=''">
+                AND a.id=#{id}
+            </if>
+            <if test="deleted !=null">
+                AND a.deleted=#{deleted}
+            </if>
+            <if test="isList !=null">
+                AND a.is_list=#{isList}
+            </if>
+            <if test="isMarketable !=null">
+                AND a.is_marketable=#{isMarketable}
+            </if>
+            <if test="goodsId !=null">
+                AND goods=#{goodsId}
+            </if>
+            <if test="name !=null and name !=''">
+                AND (a.name like concat('%',#{name},'%') or a.short_name like concat('%',#{name},'%'))
+            </if>
+
+            <if test="startPrice !=null and endPrice !=null">
+                AND a.price>=#{startPrice} and a.price&lt;=#{endPrice}
+            </if>
+
+            <if test="startPrice !=null and endPrice ==null">
+                AND a.price>=#{startPrice}
+            </if>
+
+            <if test="startPrice ==null and endPrice !=null">
+                AND a.price&lt;=#{endPrice}
+            </if>
+
+            <if test="productCategoryId !=null">
+                AND a.product_category_id=#{productCategoryId}
+            </if>
+
+            <if test="treePath !=null and treePath !=''">
+                AND c.tree_path like CONCAT('%,', #{treePath,jdbcType=VARCHAR},',%')
+            </if>
+            <if test="keyword !=null and keyword !=''">
+                AND (a.sn like CONCAT('%', #{keyword,jdbcType=VARCHAR},'%') or a.name like CONCAT('%', #{keyword,jdbcType=VARCHAR},'%'))
+            </if>
+
+            <if test="type !=null">
+                AND a.type=#{type}
+            </if>
+            <if test="subType !=null">
+                AND a.sub_type=#{subType}
+            </if>
+
+            <if test="brandId !=null">
+                AND a.brand_id=#{brandId}
+            </if>
+
+            <if test="supplierId !=null and supplierId !=''">
+                AND a.supplier_id=#{supplierId}
+            </if>
+            <if test="enterpriseId !=null and enterpriseId !=''">
+                AND a.enterprise_id=#{enterpriseId}
+            </if>
+
+            <if test="tagIds !=null">
+                AND a.id in (select products from wx_product_tag where tags in
+                <foreach collection="tagIds" open="(" separator="," close=")" item="tagId">
+                    #{tagId}
+                </foreach>
+                )
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectProductVoList" parameterType="map" resultMap="ProductVoMap">
+        select
+          a.id,a.is_marketable,f.name as mch_name,f.logo as mch_logo,a.enterprise_id,a.sub_type,a.freight_id,a.market_price,a.max_limit,a.name,a.product_category_id,c.name as product_category_name,a.brand_id,
+          a.price,a.point,a.vip1price,a.vip2price,a.vip3price,a.vip4price,a.vip5price,b.name as brand_name,a.goods,a.spec1,a.spec2,a.thumbnail,
+          a.stock-a.allocated_stock as stock,a.min_limit,a.sub_title,c.tree_path,e.total_sale,e.review
+        from wx_product a left outer join wx_goods e on a.goods=e.id
+        left outer join wx_brand b  on a.brand_id=b.id
+        left outer join wx_enterprise f  on a.enterprise_id=f.id
+        left outer join wx_product_category c  on a.product_category_id=c.id
+        <include refid="where_vo_filters"/>
+        <if test="sortField != null and sortField == 'product_category_id'">
+            ORDER BY a.product_category_id,a.orders desc,id desc
+        </if>
+        <if test="sortField != null and sortField != 'product_category_id'">
+            ORDER BY a.${sortField}
+            <if test="sortType != null and sortType != ''">
+                ${sortType}
+            </if>
+            ,a.orders desc,id desc
+        </if>
+        <if test="sortField == null">
+            ORDER BY a.orders desc,id desc
+        </if>
+    </select>
+
+    <select id="selectOkList" parameterType="map" resultMap="ProductVoMap">
+        select
+          a.id,a.is_marketable,f.name as mch_name,f.logo as mch_logo,a.enterprise_id,a.sub_type,a.freight_id,a.market_price,a.max_limit,a.name,a.product_category_id,c.name as product_category_name,a.brand_id,
+          a.price,a.point,a.vip1price,a.vip2price,a.vip3price,a.vip4price,a.vip5price,b.name as brand_name,a.goods,a.spec1,a.spec2,a.thumbnail,
+          a.stock-a.allocated_stock as stock,a.min_limit,a.sub_title,c.tree_path,e.total_sale,e.review
+        from wx_product a left outer join wx_goods e on a.goods=e.id
+          left outer join wx_brand b  on a.brand_id=b.id
+          left outer join wx_enterprise f  on a.enterprise_id=f.id
+        left outer join wx_product_category c  on a.product_category_id=c.id
+        where a.deleted=0 and a.enterprise_id=#{enterpriseId} and a.is_list=1
+        order by a.orders desc,a.id desc LIMIT 3;
+    </select>
+
+    <select id="getProductByProductId" parameterType="map" resultMap="ProductMap">
+        select
+        <include refid="column_list"/>
+        from wx_product where id= #{productId,jdbcType=BIGINT}
+    </select>
+
+    <!--促销活动-->
+<!--    <resultMap id="PromotionVoMap" type="com.rzico.basics.model.PromotionVo">-->
+<!--        <result column="id" property="id"/>-->
+<!--        <result column="title" property="title"/>-->
+<!--        <result column="type" property="type"/>-->
+<!--        <result column="amount" property="price"/>-->
+<!--        <result column="stock" property="stock"/>-->
+<!--        <result column="firsted" property="firsted"/>-->
+<!--        <result column="end_date" property="endDate"/>-->
+<!--    </resultMap>-->
+
+<!--    <select id="getPromotionVo" parameterType="map" resultMap="PromotionVoMap">-->
+<!--        select-->
+<!--        a.id,a.title,a.type,a.amount,a.end_date,a.stock,a.firsted-->
+<!--        from wx_promotion a where-->
+<!--         (enterprise_id=#{enterpriseId,jdbcType=BIGINT} and a.type in (7,8,9,10) and deleted=0 and (a.stock>0 or a.stock is null) and a.goods_id=#{goodsId,jdbcType=BIGINT} and a.status = 1 and a.begin_date &lt; NOW() and a.end_date>NOW())-->
+<!--         or-->
+<!--         (enterprise_id=#{enterpriseId,jdbcType=BIGINT} and a.type in (1,3,4,5,6) and deleted=0 and a.status = 1 and a.begin_date &lt; NOW() and a.end_date>NOW())-->
+<!--        ORDER BY a.orders desc-->
+<!--     </select>-->
+
+    <!--优惠券-->
+<!--    <resultMap id="CouponVoMap" type="com.rzico.basics.model.CouponVo">-->
+<!--        <result column="id" property="id"/>-->
+<!--        <result column="name" property="name"/>-->
+<!--        <result column="thumbnail" property="thumbnail"/>-->
+<!--        <result column="amount" property="amount"/>-->
+<!--        <result column="scope" property="scope"/>-->
+<!--        <result column="end_date" property="endDate"/>-->
+<!--        <result column="target_type" property="targetType"/>-->
+<!--        <result column="type" property="type"/>-->
+<!--    </resultMap>-->
+
+<!--    <select id="getCouponVo" parameterType="map" resultMap="CouponVoMap">-->
+
+<!--        select-->
+<!--        a.id,a.name,a.target_type,a.type,a.scope,a.end_date,a.amount,b.thumbnail-->
+<!--        from wx_coupon a left outer join wx_product b on a.product_id=b.id where-->
+<!--        a.enterprise_id=#{enterpriseId,jdbcType=BIGINT} and a.stock>0 AND a.mode=0 AND a.sub_type=0 AND a.deleted=0 and a.status = 1 and a.begin_date &lt; NOW() and a.end_date>NOW()-->
+<!--        and (-->
+<!--           a.target_type in (0)-->
+<!--          or-->
+<!--          (a.target_type in (1) and a.id in (select coupon_id from wx_coupon_target where target_id=#{brandId,jdbcType=BIGINT}))-->
+<!--          or-->
+<!--          (a.target_type in (2) and a.id in (select coupon_id from wx_coupon_target where target_id=#{vipId,jdbcType=BIGINT}))-->
+<!--          or-->
+<!--          (a.target_type in (3) and a.id in (select coupon_id from (select tree_path from wx_product_category where tree_path like CONCAT('%,', #{productCategoryId,jdbcType=BIGINT},',%')) a,wx_coupon_target b where a.tree_path like CONCAT('%,',b.target_id,',%')))-->
+<!--          or-->
+<!--          (a.target_type in (4) and a.id in (select coupon_id from wx_coupon_target where target_id=#{goodsId,jdbcType=BIGINT}))-->
+<!--        )-->
+<!--        ORDER BY a.create_date desc-->
+
+<!--    </select>-->
+
+
+    <update id="addStock" parameterType="map">
+        update wx_product set `stock`=`stock` + #{value,jdbcType=DECIMAL}
+        where id =#{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="decStock" parameterType="map">
+        update wx_product set `stock`=`stock` - #{value,jdbcType=DECIMAL}
+        where id =#{id,jdbcType=BIGINT} and stock>=#{value,jdbcType=DECIMAL}
+    </update>
+
+    <update id="addAllocatedStock" parameterType="map">
+        update wx_product set `allocatedStock`=`allocatedStock` + #{value,jdbcType=DECIMAL}
+        where id =#{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="decAllocatedStock" parameterType="map">
+        update wx_product set `allocatedStock`=`allocatedStock` - #{value,jdbcType=DECIMAL}
+        where id =#{id,jdbcType=BIGINT} and allocatedStock>=#{value,jdbcType=DECIMAL}
+    </update>
+
+    <select id="findList" resultMap="ProductMap">
+        select
+        <include refid="column_list"/>
+        from wx_product
+        where id in
+        <foreach collection="productIds" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>

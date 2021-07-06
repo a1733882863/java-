@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rzico.basics.mapper.GoodsMapper">
+<resultMap id="GoodsMap" type="com.xz.model.Goods">
+    <!---->
+    <result column="id" property="id"/>
+    <!--创建日期-->
+    <result column="create_date" property="createDate"/>
+    <!--修改日期-->
+    <result column="modify_date" property="modifyDate"/>
+    <!--好评-->
+    <result column="review" property="review"/>
+    <!--人气-->
+    <result column="hits" property="hits"/>
+    <!--月销量-->
+    <result column="total_sale" property="totalSale"/>
+    <!--星级-->
+    <result column="score" property="score"/>
+</resultMap>
+    <!--列信息-->
+    <sql id="column_list">
+        id,create_date,modify_date,review,hits,total_sale,score
+    </sql>
+    <!--动态条件-->
+    <sql id="where_filters">
+        <where>
+            <if test="id !=null and id !=''">
+                AND id=#{id}
+            </if>
+            <if test="createDate !=null and createDate !=''">
+                AND create_date=#{createDate}
+            </if>
+            <if test="modifyDate !=null and modifyDate !=''">
+                AND modify_date=#{modifyDate}
+            </if>
+            <if test="review !=null and review !=''">
+                AND review=#{review}
+            </if>
+            <if test="hits !=null and hits !=''">
+                AND hits=#{hits}
+            </if>
+            <if test="totalSale !=null ">
+                AND total_sale=#{totalSale}
+            </if>
+            <if test="enterpriseId !=null">
+                AND id IN (select goods from wx_product where enterprise_id=#{enterpriseId})
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectList" parameterType="map" resultMap="GoodsMap">
+        select
+        <include refid="column_list"/>
+        from wx_goods
+        <include refid="where_filters"/>
+        <if test="sortField != null and sortField != ''">
+            ORDER BY ${sortField}
+            <if test="sortType != null and sortType != ''">
+            ${sortType}
+            </if>
+        </if>
+    </select>
+
+
+    <delete id="deleteList" parameterType="map">
+        delete from wx_goods <include refid="where_filters"/>
+    </delete>
+
+
+</mapper>

@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class WaterMarkWithLogUtils {
+public class WaterMarkWithLogDemo {
 
     /**
      * 将指定图标(png图片)印刷到指定图片上
