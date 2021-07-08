@@ -8,6 +8,7 @@ import com.xz.utils.OssFileUtil;
 import com.xz.utils.exprotexcel.ExportExcel;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.w3c.dom.NodeList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -39,14 +41,61 @@ public class ProductAdminController {
     @Autowired
     ProductService productService;
 
+
+    public static Map<String,String> excelMap1 = null;
+
+    public static Map<String,String> excelMap2 = null;
+
+    static {
+        excelMap1 = new HashMap();
+        excelMap2 = new HashMap();
+        //菜品编码 菜品名称  菜品分类 售卖价 规格名称 会员价 预估成本 条形码  数字助记码   是否打印  售卖转态  起售份数 菜品辣度 菜品描述
+         //       菜品详细描述  备注1
+
+
+        excelMap1.put("菜品编码","goods");
+        excelMap1.put("菜品名称","name");
+        excelMap1.put("菜品分类","categoryName");
+        excelMap1.put("售卖价","price");
+        excelMap1.put("规格名称","spec1");
+        excelMap1.put("会员价","vip1price");
+        //excelMap1.put("预估成本","sn");
+        excelMap1.put("条形码","sn");
+        //excelMap1.put("数字助记码","sn");
+        //excelMap1.put("是否打印","sn");
+        excelMap1.put("售卖转态","isMarketable");
+        //excelMap1.put("起售份数","sn");
+        //excelMap1.put("菜品辣度","sn");
+        excelMap1.put("菜品描述","subTitle");
+        excelMap1.put("单位(如件,斤，两)","unit");
+
+        excelMap2.put("sn","菜品编码");
+        excelMap2.put("name","菜品名称");
+        excelMap2.put("categoryName","菜品分类");
+        excelMap2.put("price","售卖价");
+        excelMap2.put("spec1","规格名称");
+        excelMap2.put("vip1price","会员价");
+        //excelMap1.put("预估成本","sn");
+        //excelMap1.put("条形码","sn");
+        //excelMap1.put("数字助记码","sn");
+        //excelMap1.put("是否打印","sn");
+        excelMap2.put("isMarketable","售卖转态");
+        //excelMap1.put("起售份数","sn");
+        //excelMap1.put("菜品辣度","sn");
+        excelMap2.put("subTitle","菜品描述");
+        excelMap2.put("unit","单位(如件,斤，两)");
+
+    }
+
     @ResponseBody
-    @GetMapping("/uploadExcel")
+    @PostMapping("/uploadExcel")
     public String uploadExcel(HttpServletRequest request, MultipartFile file) throws Exception {
 
         File file1 = new File("C:\\\\Users\\\\xz\\\\Desktop\\\\github\\\\java基础练习\\\\springboot-export-datebase\\\\src\\\\main\\\\resources\\\\sheet2.xlsx");
         InputStream inputStream = new FileInputStream(file1);
+        String uploadName = "excel_"+"300";
         //InputStream inputStream = file.getInputStream();
-        OssFileUtil.uploadAliyun(null,"excelUpload/"+file1.getName(),inputStream,"UTF-8");
+        OssFileUtil.uploadAliyun(null,"excelUpload/"+uploadName,inputStream,"UTF-8");
         //file对象名记得和前端name属性值一致
         //System.out.println(file1.getOriginalFilename());
         return "";
@@ -55,25 +104,42 @@ public class ProductAdminController {
 
 
 
+    //导出菜品信息
+    //type=0，最简导出，只导出必要字段
     @ResponseBody
     @GetMapping("/exportData")
-    public String exportData(HttpServletResponse response) throws Exception {
-        //菜品名称，菜品分类，商品标签，运费模板，货号，商品图片， 规格，
-        Map<String, Object> params = new HashMap<String, Object>();
-        //params = buildSortField(params, pageable);
+//    @ApiImplicitParams(
+//            {
 
+//                    @ApiImplicitParam(name = "productCategory", value = "分类 id", dataType = "Long", paramType = "query"),
+//                    @ApiImplicitParam(name = "type", value = "商品类型 {0:导出表格,1:简单导出,2:全部导出}", dataType = "Integer", paramType = "query"),
+//                    @ApiImplicitParam(name = "subType", value = "类型 {0.菜品,1:套餐,2:水票,3.压桶,4.桶装水}", dataType = "Integer", paramType = "query"),
+//                    @ApiImplicitParam(name = "name", value = "商品名称", dataType = "String", paramType = "query"),
+//                    @ApiImplicitParam(name = "keyword", value = "商品名称", dataType = "String", paramType = "query"),
+//                    @ApiImplicitParam(name = "sn", value = "条码/货号", dataType = "String", paramType = "query"),
+//                    @ApiImplicitParam(name = "deleted", value = "删除标志", dataType = "Boolean", paramType = "query"),
+//                    @ApiImplicitParam(name = "isMarketable", value = "是否上架", dataType = "Boolean", paramType = "query"),
+//                    @ApiImplicitParam(name = "tagIds", value = "标签", dataType = "String", paramType = "query"),
+//                    @ApiImplicitParam(name = "isList", value = "是否显示多规格", dataType = "Boolean", paramType = "query"),
+//            })
+    public String exportData(Long productCategoryId,Integer deleted,Integer isList,
+                             Integer isMarketable,
+                             Long[] tagIds,Integer type,HttpServletResponse response) throws Exception {
+
+
+        Map<String, Object> params = new HashMap<String, Object>();        //params = buildSortField(params, pageable);
         if (params.get("sortField") != null && "create_date".equals(params.get("sortField").toString())) {
             params.put("sortField", "orders");
             params.put("sortType", "asc");
         }
-
-        params.put("deleted", false);
-        params.put("isList", true);
-        params.put("isMarketable", true);
+        params.put("deleted", 0);
+        params.put("isList", 1);
+        params.put("isMarketable", 1);
 
        // Enterprise enterprise = enterpriseService.findByMch(mchId);
  //       if (enterprise != null) {
             params.put("enterpriseId", 300);
+            //params.put("enterpriseId", enterprise);
 //        } else {
 //            return CommResult.error("没有开通企业");
 //        }
@@ -81,100 +147,33 @@ public class ProductAdminController {
 //        if (productCategoryId != null) {
 //            params.put("treePath", String.valueOf(productCategoryId));
 //        }
-
-//        if (brandId != null) {
-//            params.put("brandId", brandId);
-//        }
-
-//        if (startPrice != null) {
-//            params.put("startPrice", startPrice);
-//        }
-
-//        if (endPrice != null) {
-//            params.put("endPrice", endPrice);
-//        }
-
-//        if (subType != null) {
-//            params.put("subType", subType);
-//        }
-//
-//        if (name != null) {
-//            params.put("name", name);
-//        }
-//
-//        if (tagIds != null && tagIds.length > 0) {
-//            params.put("tagIds", tagIds);
-//        }
-//
-//        if (StringUtils.isNotEmpty(keyword)) {
-//            params.put("keyword", keyword);
-//        }
-
-//        Page<Object> startPage = PageHelper.startPage(pageable.getPageNum(), pageable.getPageSize());
         List<ProductVo> list = productService.selectProductVoList(params);
+        String sheetName = "sheet1";
+        XSSFWorkbook workbook = productService.transportExcel(list,sheetName);
 
- //       Member member = memberService.getCurrent();
-        //获取全场活动
-        //TODO
-        for (ProductVo product : list) {
-
-            Map<String, Object> prm = new HashMap<>();
-            prm.put("goodsId", product.getGoodsId());
-            Integer rw = productService.selectRowCount(prm);
-            product.setSku(rw);
-
-//            if (member != null && member.getVvip().compareTo(1) > 0) {
-//                product.setVipPrice(product.getMemberPrice(member));
+        BufferedOutputStream fos = null;
+        try {
+            String fileName = null;
+//            if (type == null || type == 0) {
+//                fileName = "商品导入模板" + ".xlsx";
 //            } else {
-                product.setVipPrice(product.getVip1price());
-                if (product.getVipPrice().compareTo(BigDecimal.ZERO) == 0) {
-                    product.setVipPrice(product.getPrice());
-                }
+//                fileName = "导出的商品" + ".xlsx";
 //            }
-
-//            if (member != null && member.getAmount().compareTo(BigDecimal.ZERO) > 0) {
-//                List<PromotionVo> pvo = new ArrayList<>();
-//                for (PromotionVo vo : product.getPromotions()) {
-//                    if (vo.getType().equals(10)) {
-//                        continue;
-//                    }
-//                    if (vo.getFirsted()) {
-//                        continue;
-//                    }
-//                    if (product.getFreightId() == null && vo.getType().equals(6)) {
-//                        continue;
-//                    }
-//                    pvo.add(vo);
-//                }
-//                product.setPromotions(pvo);
-//            }
-
+            fileName = "导出的商品" + ".xlsx";
+            response.setContentType("application/x-msdownload");
+            response.setHeader("Content-Disposition", "attachment;filename=" + new String( fileName.getBytes("gb2312"), "ISO8859-1" ));
+            fos = new BufferedOutputStream(response.getOutputStream());
+            workbook.write(fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
         }
 
- //       PageResult<ProductVo> pageResult = new PageResult<>(list, startPage.getTotal(), pageable);
- //       return CommResult.success(pageResult);
 
-
-
-        //如果出现中文乱码请添加下面这句
-        //queryJson = URLDecoder.decode(queryJson,"utf-8");
-        //需要导入alibaba的fastjson包
-        //User user = com.alibaba.fastjson.JSON.parseObject(queryJson, User.class);
-        //List<User> userlList = userService.getUserForExcel(user);
-        ExportExcel<ProductVo> ee= new ExportExcel<ProductVo>();
-        //根据ProductVo遍历出headers
-        Class productClass = ProductVo.class;
-        Field[] declaredFields = productClass.getDeclaredFields();
-        String[] headers = new String[declaredFields.length];
-        for (int i = 0;i < declaredFields.length; i ++) {
-            headers[i] = declaredFields[i].getName();
-
-        }
-        String fileName = "sheet2";
-        ee.exportExcel(headers,list,fileName,response);
-
-
-        return list.toString();
+        return "导出完毕";
     }
 
 
@@ -183,9 +182,12 @@ public class ProductAdminController {
 
     @ResponseBody
     @GetMapping("/importData")
-    public String importData() throws Exception {
+    public String importData(Integer type) throws Exception {
 
-        InputStream inputStreamByUrl1 = OssFileUtil.getInputStreamByUrl("https://ptcb.oss-cn-hangzhou.aliyuncs.com/excelUpload/sheet2.xlsx");
+        String uploadName = "excel_"+"300";
+
+
+        InputStream inputStreamByUrl1 = OssFileUtil.getInputStreamByUrl("https://ptcb.oss-cn-hangzhou.aliyuncs.com/excelUpload/"+ uploadName);
         ExcelData sheet1 = new ExcelData(inputStreamByUrl1,"sheet2");
 
         //ExcelData sheet1 = new ExcelData("C:\\Users\\xz\\Desktop\\github\\java基础练习\\springboot-export-datebase\\src\\main\\resources\\sheet2.xlsx", "sheet2");
@@ -214,7 +216,13 @@ public class ProductAdminController {
         //循环遍历 字段名放入Map<Integer, String> xlsFieldMap
         for (int i = 0;i < row0.getPhysicalNumberOfCells(); i++) {
             fieldName = row0.getCell(i).toString();
-            xlsFieldMap.put(i,underlineToCamel(fieldName));
+            if (type !=null && type == 1) {
+                fieldName = excelMap1.get(fieldName);
+                xlsFieldMap.put(i,fieldName);
+            }
+            else {
+                xlsFieldMap.put(i,underlineToCamel(fieldName));
+            }
         }
 
 
@@ -278,7 +286,7 @@ public class ProductAdminController {
                 productsByCategory.put(producttemp.getGoodsId(),temp);
             }
 
-            producttemp.setIsMarketable(false);
+            producttemp.setIsMarketable(0);
 //            if (product.getSn()==null) {
 //                return CommResult.error("货号不能为空");
 //            }

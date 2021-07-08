@@ -72,8 +72,8 @@ public class OssFileUtil {
 
     public static void uploadAliyun(String sysPlugin, String path, InputStream inputStream, String contentType) throws IOException {
 
-        String accessId = "LTAI4G4BXSto8ZG7NgnRzV9L";
-        String accessKey = "fvv3luaDnJTbVq6BnJoO14eFV1gEn4";
+        String accessId = "LTA";
+        String accessKey = "FcGiKBKy4WS4dt";
         String bucketName = "ptcb";
         String endpoint = "oss-cn-hangzhou.aliyuncs.com";
         try {
@@ -91,8 +91,8 @@ public class OssFileUtil {
 
     public static String uploadAliyun2(String sysPlugin, String path, InputStream inputStream, String contentType) throws IOException {
 
-        String accessId = "LTAI4G4BXSto8ZG7NgnRzV9L";
-        String accessKey = "fvv3luaDnJTbVq6BnJoO14eFV1gEn4";
+        String accessId = "LTAI5tFHK";
+        String accessKey = "FcGiKBKy4WSaT";
         String bucketName = "ptcb";
         String endpoint = "oss-cn-hangzhou.aliyuncs.com";
         try {

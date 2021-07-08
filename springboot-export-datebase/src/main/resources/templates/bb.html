@@ -7,5 +7,11 @@
 <body>
 Thymeleaf模板引擎
 <h1 th:text="${name}">hello world~~~~~~~~~~${name}</h1>
+
+<form action="http://localhost:8090/aa/uploadExcel" method="post" enctype="multipart/form-data">
+    <input type="file" name="meFile" multiple="multiple" /><p>
+    <input type="submit" value="提交" /><p>
+    <input type="reset" value="清空" /><p>
+</form>
 </body>
 </html>

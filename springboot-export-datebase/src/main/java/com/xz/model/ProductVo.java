@@ -27,8 +27,13 @@ public class ProductVo {
     //@ApiModelProperty(value = "")
     protected Long id;
 
+    //@/ApiModelProperty(value = "编号")
+    protected String sn;
+
     //@ApiModelProperty(value = "市场价")
     protected BigDecimal marketPrice;
+
+
 
     //@ApiModelProperty(value = "是否上架")
     protected Boolean isMarketable;
@@ -120,8 +125,9 @@ public class ProductVo {
    // @ApiModelProperty(value = "积分")
     protected Integer point;
 
-    //@/ApiModelProperty(value = "编号")
-    protected String sn;
+
+
+    protected String categoryName;
 
 
   //  protected List<PromotionVo> promotions = Collections.emptyList();

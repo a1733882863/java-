@@ -9,6 +9,7 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.function.Supplier;
@@ -42,16 +43,16 @@ public class Product {
     protected BigDecimal cost;
 
     //@ApiModelProperty(value = "是否删除")
-    protected Boolean deleted;
+    protected Integer deleted;
 
     //@ApiModelProperty(value = "是否列出")
-    protected Boolean isList;
+    protected Integer isList;
 
  //   @ApiModelProperty(value = "是否有视频")
-    protected Boolean isMetaVideo;
+    protected Integer isMetaVideo;
 
    // @ApiModelProperty(value = "是否上架")
-    protected Boolean isMarketable;
+    protected Integer isMarketable;
 
     //@ApiModelProperty(value = "市场价")
     protected BigDecimal marketPrice;
@@ -61,6 +62,9 @@ public class Product {
 
     //@ApiModelProperty(value = "简称")
     protected String shortName;
+
+
+    protected String productCategoryName;
 
     //@ApiModelProperty(value = "销售价")
     protected BigDecimal price;
@@ -198,6 +202,9 @@ public class Product {
 //
 //    //@ApiModelProperty(value = "税率" )
    protected java.math.BigDecimal tax;
+
+   @Transient
+   protected String categoryName;
 //
 //    protected List<Tag> tags = Collections.emptyList();
 
